@@ -4,11 +4,13 @@
 
 野图是一个在自己电脑上运行的二维地图工作台：查看和编辑标准地理文件，把不确定的覆盖区明确标为估算，下载允许离线的底图，并保留可恢复的本地历史。
 
-[快速运行](#快速运行) · [演示数据](#先用演示数据试一遍) · [版本说明](https://github.com/lanjunyao/field-atlas/releases/tag/v0.2.0) · [反馈问题](https://github.com/lanjunyao/field-atlas/issues)
+[Mac 下载（Apple Silicon，未签名）](https://github.com/lanjunyao/field-atlas/releases/download/v0.2.0/FieldAtlas-0.2.0-macos-arm64-unsigned.zip) · [源码运行](#快速运行) · [演示数据](#先用演示数据试一遍) · [版本说明](https://github.com/lanjunyao/field-atlas/releases/tag/v0.2.0) · [反馈问题](https://github.com/lanjunyao/field-atlas/issues)
 
 ![野图地图工作台：合成点线面与历史卫星底图](docs/images/workspace.png)
 
 *真实运行界面，标注为合成演示数据；卫星底图为 EOX Sentinel-2 历史影像。仓库不包含私人作业数据或地图包。*
+
+[下载截图同款合成标注](public/samples/demo-workspace.geojson)，导入后即可演示图层、点线面与参数覆盖区。
 
 ## 为什么做野图：三个具体痛点
 
@@ -45,7 +47,7 @@ npm run build
 npm start
 ```
 
-打开 **http://127.0.0.1:9847**。看到地图、左侧对象列表和“已保存到本机”即已启动。首次启动无需 API Key；默认在线底图需要网络，演练网格可离线使用。
+打开 [http://127.0.0.1:9847](http://127.0.0.1:9847/)。看到地图、左侧对象列表和“已保存到本机”即已启动。首次启动无需 API Key；默认在线底图需要网络，演练网格可离线使用。
 
 已有野图用户若要隔离试用数据，可先指定一个新目录：
 
@@ -71,7 +73,7 @@ npm run package:mac
 
 在上一级生成 `野图.app`，内置**当前构建机器的 Node 运行时与架构**。打包脚本需要联网安装生产依赖；目前主要验证 Apple Silicon。应用使用 Chrome 独立窗口，缺少 Chrome 时打开默认浏览器。后台服务关闭方式见 [运行与恢复](docs/OPERATIONS.md)。
 
-本次公开 Release 提供源码试用入口，**没有提供已签名、公证的 Mac 安装包**。自行构建的包也未签名、公证；请先阅读并核对源码再运行。
+本次 [Release](https://github.com/lanjunyao/field-atlas/releases/tag/v0.2.0) 提供 **Apple Silicon Mac 未签名试用包**，内置 Node 与运行依赖，无需另装 Node。包内没有业务数据或离线地图。下载后可先用同页 `SHA256SUMS.txt` 核对文件。应用未签名、公证，首次打开可能受到 macOS 安全检查；请阅读源码和版本说明后自行决定是否运行，源码启动也是可用入口。
 
 ## 卫星图源、离线范围和精度
 
