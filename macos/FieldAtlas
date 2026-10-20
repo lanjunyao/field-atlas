@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e
+CONTENTS="$(cd "$(dirname "$0")/.." && pwd)"
+NODE="$CONTENTS/MacOS/node"
+APP_CODE="$CONTENTS/Resources/app"
+DATA_DIR="$HOME/Library/Application Support/FieldAtlas"
+URL='http://127.0.0.1:9847'
+mkdir -p "$DATA_DIR"
+exec >> "$DATA_DIR/launcher.log" 2>&1
+HEALTH="$(/usr/bin/curl -fsS --max-time 2 "$URL/api/health" 2>/dev/null || true)"
+OWN_PID=''
+if [[ "$HEALTH" != *'"app":"field-atlas"'* ]]; then
+ FIELD_ATLAS_DATA="$DATA_DIR" "$NODE" "$APP_CODE/start-service.mjs"
+ for ((i=0;i<75;i++)); do
+  HEALTH="$(/usr/bin/curl -fsS --max-time 1 "$URL/api/health" 2>/dev/null || true)"
+  [[ "$HEALTH" == *'"app":"field-atlas"'* ]] && break
+  sleep 0.2
+ done
+fi
+if [[ "$HEALTH" != *'"app":"field-atlas"'* ]]; then
+ /usr/bin/osascript -e 'display alert "野图启动失败" message "本地端口 9847 可能被占用。日志位于 Library/Application Support/FieldAtlas/server.log。"'
+ exit 1
+fi
+if [ -x '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome' ]; then
+ /usr/bin/open -na 'Google Chrome' --args "--app=$URL" "--user-data-dir=$DATA_DIR/browser-profile" --no-first-run --no-default-browser-check
+else
+ /usr/bin/open "$URL"
+fi
